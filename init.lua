@@ -43,6 +43,8 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+-- Set the scrollback buffer to 1M lines in the term
+-- vim.opt.scrollback = 1000000
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -51,6 +53,13 @@ vim.o.confirm = true
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
+
+-- automatically close command window when it is opened, since it's not very useful and can be accidentally opened by presssing q:
+vim.api.nvim_create_autocmd('CmdwinEnter', {
+  callback = function()
+    vim.cmd 'quit'
+  end,
+})
 
 -- [[ Basic Keymaps ]]
 
@@ -117,6 +126,8 @@ rtp:prepend(lazypath)
 
 -- [[ Configure and install plugins ]]
 require('lazy').setup({
+  -- require 'plugins.CopilotChat',
+  -- require 'plugins.copilot',
   require 'plugins.markdown_preview',
   require 'plugins.guess-indent',
   require 'plugins.gitsigns',
